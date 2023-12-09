@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon Autocomplete</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <h1>Pokemon Autocomplete</h1>
+    <label for="query">Enter Pokemon name:</label>
+    <input type="text" id="query" name="query" autocomplete="off">
+    <ul id="suggestions"></ul>
+
+    <script>
+        $(document).ready(function () {
+            $('#query').on('input', function () {
+                var query = $(this).val();
+                if (query.length >= 1) {
+                    $.ajax({
+                        url: '/autocomplete',
+                        data: {query: query},
+                        success: function (data) {
+                            displaySuggestions(data);
+                        }
+                    });
+                } else {
+                    $('#suggestions').empty();
+                }
+            });
+
+            function displaySuggestions(suggestions) {
+                $('#suggestions').empty();
+                for (var i = 0; i < suggestions.length; i++) {
+                    $('#suggestions').append('<li>' + suggestions[i] + '</li>');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
